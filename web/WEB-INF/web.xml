@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+        <!--
+            配置DispatcherServlet（前端控制器、核心调度器、分发器）
+            接收除了.jsp的所有请求，都交给springmvc处理
+        -->
+        <servlet>
+            <servlet-name>springmvc</servlet-name>
+            <!--
+                DispatcherServlet类的路径
+            -->
+            <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+            <!--
+                初始化参数，要加载spring的相关配置
+                contextConfigLocation
+                配置springmvc的xml文件，指定路径
+                不配置也可以，他会自动去WEB-INF文件夹中找名字叫做（[servlet-name]）springmvc-servlet.xml的文件
+            -->
+            <init-param>
+                <param-name>contextConfigLocation</param-name>
+                <param-value>classpath:spring-mvc.xml</param-value>
+            </init-param>
+            <!--
+                启动时加载servlet
+                当web服务器启动时就会创建servlet（自动调用servlet的构造函数及init（）方法）
+                不要每次请求都加载spring-mvc.xml
+                只需要启动时加载一次就好
+            -->
+            <load-on-startup>1</load-on-startup>
+        </servlet>
+        <!--
+            配置DispatcherServlet的映射
+            拦截所有请求
+            SpringMVC以DispatcherServlet（调度器、分发）为中心，相对于快递分发员
+            *不可以
+            通常用为springmvc映射的路径为：
+            /（用的最多）：除了.jsp的所有请求都会被匹配
+            /*：所有请求都会被匹配，例springmvc/user/GetUser.jsp
+                    但是没有必要匹配.jsp，因为会被Tomcat默认配置
+            *.do 或者 *.action：url结尾以.do或者.action的请求会被匹配（后缀形式现在不用了）
+            /request/*：要进行约定，将jsp放在一个单独文件夹(比如/views/)
+                    那么所有的servlet请求都用/request/
+        -->
+        <servlet-mapping>
+            <servlet-name>springmvc</servlet-name>
+            <url-pattern>/</url-pattern>
+        </servlet-mapping>
+</web-app>
